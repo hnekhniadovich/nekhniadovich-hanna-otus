@@ -27,20 +27,24 @@ const maxItemAssociation = (products) => {
         }
     }
 
+    const sortedAssociations = associations.map(el => [...el].sort())
+    sortedAssociations.sort()
+
     let max = 0
     let maxAssociation
 
-    for(let y = 0; y < associations.length; y++) {
-        if(associations[y].size > max) {
-            max = associations[y].length
-            maxAssociation = associations[y]
+
+    for(let y = 0; y < sortedAssociations.length; y++) {
+        if(sortedAssociations[y].length > max) {
+            max = sortedAssociations[y].length
+            maxAssociation = sortedAssociations[y]
         }
     }
 
-    let sortedAssociation = Array.from(maxAssociation).sort()
-
-    return sortedAssociation
+    return maxAssociation
 }
+
+
 
 
 
