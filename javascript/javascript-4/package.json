@@ -1,0 +1,12 @@
+{
+  "name": "node-file-system",
+  "version": "1.0.0",
+  "description": "Homework 4 for Otus - Javascript Deleveloper. Professional",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tree": "node index.js"
+  },
+  "author": "Hanna Nekhniadovich",
+  "license": "ISC"
+}
