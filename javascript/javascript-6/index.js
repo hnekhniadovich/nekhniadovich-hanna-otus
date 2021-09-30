@@ -1,3 +1,7 @@
+// Для запустка проекта:
+// - npm install
+// - node index.js
+
 const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const schema = require('./schema');
