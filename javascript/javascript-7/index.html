@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<head>
+  <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+  <script type="module" src="./index.js"></script>
+</head>
+<body>
+  <h2>Custom Tree Element</h2>
+  <my-custom-tree-element items='{
+    "id": 1,
+    "items": [
+      {
+        "id": 2,
+        "items": [
+          { "id": 3 }, 
+          { "id": 4 }
+        ]
+      },
+      { "id": 5 }
+    ]
+  }'></my-custom-tree-element>
+</body>
