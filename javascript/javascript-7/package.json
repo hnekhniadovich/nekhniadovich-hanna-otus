@@ -1,0 +1,25 @@
+{
+  "name": "web-components",
+  "version": "1.0.0",
+  "description": "Homework 7 for Otus - Javascript Developer. Professional. Custom Elements Tree* Lit-Element",
+  "main": "index.html",
+  "type": "module",
+  "scripts": {
+    "start": "parcel index.html --open",
+    "build": "parcel build index.html"
+  },
+  "author": "Hanna Nekhniadovich",
+  "license": "ISC",
+  "dependencies": {
+    "@webcomponents/webcomponentsjs": "latest",
+    "lit": "^2.0.0",
+    "@lit/reactive-element": "^1.0.0",
+    "lit-element": "^3.0.0",
+    "lit-html": "^2.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "7.2.0",
+    "parcel-bundler": "^1.6.1"
+  },
+  "keywords": []
+}
