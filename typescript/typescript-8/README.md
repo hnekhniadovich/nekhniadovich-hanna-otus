@@ -1,0 +1,3 @@
+## Budgety
+
+> Simple Budget application.
