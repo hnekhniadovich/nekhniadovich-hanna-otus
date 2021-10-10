@@ -1,8 +1,6 @@
 "use strict";
-console.log('Hello world!');
 // BUDGET CONTROLLER
 const budgetController = (() => {
-    console.log('budget controller is executed');
     class Expense {
         constructor(id, description, value) {
             this.calcPercentage = (totalIncome) => {
@@ -31,8 +29,6 @@ const budgetController = (() => {
         }
     }
     ;
-    // exp: never[];
-    // inc: never[];
     let data = {
         allItems: {
             exp: [],
@@ -54,7 +50,7 @@ const budgetController = (() => {
     };
     return {
         addItem: (type, des, val) => {
-            let newItem = {};
+            let newItem = { id: 0, description: "", value: 0 };
             let ID;
             // Create new ID
             if (data.allItems[type].length > 0) {
@@ -125,9 +121,7 @@ const budgetController = (() => {
         }
     };
 })();
-// UI CONTROLLER
 const UIController = (() => {
-    console.log('UI controller is executed');
     const DOMstrings = {
         inputType: '.add__type',
         inputDescription: '.add__description',
@@ -147,10 +141,11 @@ const UIController = (() => {
         let numSplit;
         let int;
         let dec;
+        let numString;
         //let type;
         num = Math.abs(num);
-        num = num.toFixed(2);
-        numSplit = num.split('.');
+        numString = num.toFixed(2);
+        numSplit = numString.split('.');
         int = numSplit[0];
         if (int.length > 3) {
             int = int.substr(0, int.length - 3) + ',' + int.substr(int.length - 3, 3);

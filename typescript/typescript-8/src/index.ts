@@ -38,7 +38,20 @@ const budgetController = (() => {
         }
     };
 
-    let data: any = {
+    interface Data {
+        allItems: {
+            exp: Expense[],
+            inc: Income[]
+        },
+        totals: {
+            exp: number,
+            inc: number
+        },
+        budget: number,
+        percentage: number
+      }
+
+    let data: Data | any = {
         allItems: {
             exp: [],
             inc: []
@@ -61,7 +74,7 @@ const budgetController = (() => {
 
     return {
         addItem: (type: string, des: string, val: number): Income | Expense => {
-            let newItem: any = {};
+            let newItem: Income | Expense = {  id: 0, description: "", value: 0}
             let ID: number;
             // Create new ID
             if(data.allItems[type].length > 0) {
@@ -143,7 +156,6 @@ const budgetController = (() => {
 })();
 
 const UIController = (() => {
-    console.log('UI controller is executed');
 
     const DOMstrings = {
         inputType: '.add__type',
@@ -161,16 +173,17 @@ const UIController = (() => {
         dateLabel: '.budget__title--month'
     };
 
-    const formatNumber = (num: any, type: string): string => {
+    const formatNumber = (num: number, type: string): string => {
         let numSplit: string[]; 
         let int: string;
         let dec: string; 
+        let numString: string;
         //let type;
 
         num = Math.abs(num);
-        num = num.toFixed(2);
+        numString = num.toFixed(2);
 
-        numSplit = num.split('.');
+        numSplit = numString.split('.');
 
         int = numSplit[0];
         if(int.length > 3) {
@@ -182,7 +195,7 @@ const UIController = (() => {
         return (type === 'exp' ? '-' : '+') + ' ' + int + '.' + dec;
     };
 
-    const nodeListForEach = (list: NodeListOf<Element>, callback: (list: Element, i: number) => any): void => {
+    const nodeListForEach = (list: NodeListOf<Element>, callback: (list: Element, i: number) => void): void => {
         for (let i = 0; i < list.length; i++) {
             callback(list[i], i)
         }
@@ -197,7 +210,7 @@ const UIController = (() => {
             };   
         },
 
-        addListItem: (obj: any, type: string): void => {
+        addListItem: (obj: { id: string, description: string, value: number }, type: string): void => {
             let html: string = '';
             let newHtml: string = '';
             let element: string = '';
@@ -227,8 +240,8 @@ const UIController = (() => {
         },
 
         deleteListItem: (selectorID: string): void => {
-            let el: any = document.getElementById(selectorID);
-            el.parentNode.removeChild(el);
+            let el = document.getElementById(selectorID) as HTMLInputElement;
+            el.parentNode!.removeChild(el);
         },
 
         clearFields: (): void => {
@@ -317,113 +330,116 @@ const UIController = (() => {
 
 })();
 
-// // GLOBAL APP CONTROLLER
-// var controller = (function(budgetCtrl, UICtrl) {
+// GLOBAL APP CONTROLLER
+const controller = ((budgetCtrl, UICtrl) => {
 
-//     var setupEventListeners = function() {
+    let setupEventListeners = () => {
 
-//         var DOM = UICtrl.getDOMstrings();
+        let DOM = UICtrl.getDOMstrings();
 
-//         document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
+        (document.querySelector(DOM.inputBtn)as HTMLElement).addEventListener('click', ctrlAddItem);
 
-//         document.addEventListener('keypress', function(event) {
+        document.addEventListener('keypress', function(event) {
     
-//             if(event.keyCode === 13 || event.which === 13) {
-//                 ctrlAddItem();
-//             }
-//         });
+            if(event.keyCode === 13 || event.which === 13) {
+                ctrlAddItem();
+            }
+        });
 
-//         document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
+        (document.querySelector(DOM.container) as HTMLElement).addEventListener('click', ctrlDeleteItem);
         
-//         document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changedType);
-//     };
+        (document.querySelector(DOM.inputType) as HTMLElement).addEventListener('change', UICtrl.changedType);
+    };
 
-//     var updateBudget = function() {
-//         // 1. Calculate the budget
-//         budgetCtrl.calculateBudget();
+    let updateBudget = () => {
+        // 1. Calculate the budget
+        budgetCtrl.calculateBudget();
 
-//         // 2. Return the budget
-//         var budget = budgetController.getBudget();
+        // 2. Return the budget
+        let budget = budgetController.getBudget();
 
-//         // 6. Display the budget on the UI
-//         UICtrl.displayBudget(budget);
+        // 6. Display the budget on the UI
+        UICtrl.displayBudget(budget);
 
-//     }
+    }
 
-//     var updatePercentages = function() {
-//         //1. calculate percentages
-//         budgetCtrl.calculatePercentages();
-//         //2. read percentages from the budget controller
-//         var percentages = budgetCtrl.getPercentage();
-//         //3. update the ui with the new percentages
-//         UICtrl.displayPercentages(percentages);
-//     }
+    let updatePercentages = () => {
+        //1. calculate percentages
+        budgetCtrl.calculatePercentages();
+        //2. read percentages from the budget controller
+        let percentages = budgetCtrl.getPercentage();
+        //3. update the ui with the new percentages
+        UICtrl.displayPercentages(percentages);
+    }
 
 
-//     var ctrlAddItem = function() {
-//         var input, newItem;
+    let ctrlAddItem = () => {
+        let input: any;
+        let newItem: any
 
-//         // 1. Get the field input data
+        // 1. Get the field input data
 
-//         input = UICtrl.getInput();
-//         //console.log(input);
-//         if(input.description !== "" && !isNaN(input.value) && input.value > 0) {
-//             // 2. Add the item to the budget controller
+        input = UICtrl.getInput();
+        //console.log(input);
+        if(input.description !== "" && !isNaN(input.value) && input.value > 0) {
+            // 2. Add the item to the budget controller
+            newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
-//             newItem = budgetCtrl.addItem(input.type, input.description, input.value);
+            // 3. Add the item to the UI
+            UICtrl.addListItem(newItem, input.type);
 
-//             // 3. Add the item to the UI
+            //4. Clear the fields
+            UICtrl.clearFields();
 
-//             UICtrl.addListItem(newItem, input.type);
+            // 5. Calculate and update budget
+            updateBudget();
 
-//             //4. Clear the fields
+            // 6. Calculate and update percentages
+            updatePercentages();
+        } 
+    }
 
-//             UICtrl.clearFields();
+    let ctrlDeleteItem = (event: any) => {
+        let itemId: string;
+        let splitID: string[];
+        let type: string;
+        let ID: number;
 
-//             // 5. Calculate and update budget
-//             updateBudget();
-
-//             // 6. Calculate and update percentages
-//             updatePercentages();
-//         } 
-//     }
-
-//     var ctrlDeleteItem = function(event) {
-//         var itemId, splitID, type, ID;
-
-//         itemId = event.target.parentNode.parentNode.parentNode.parentNode.id;
+        itemId = event.target.parentNode.parentNode.parentNode.parentNode.id;
     
-//         if (itemId) {
-//             splitID = itemId.split('-');
-//             type = splitID[0];
-//             ID = parseInt(splitID[1]);
+        if (itemId) {
+            splitID = itemId.split('-');
+            type = splitID[0];
+            ID = parseInt(splitID[1]);
 
-//             // 1. Delete the item from the data structure
-//             budgetCtrl.deleteItem(type, ID);
+            // 1. Delete the item from the data structure
+            budgetCtrl.deleteItem(type, ID);
 
-//             // 2. Delete the item from the UI
-//             UICtrl.deleteListItem(itemId);
+            // 2. Delete the item from the UI
+            UICtrl.deleteListItem(itemId);
 
-//             // 3. Update and show the new budget
-//             updateBudget();
+            // 3. Update and show the new budget
+            updateBudget();
 
-//         }
-//     }
+        }
+    }
 
-//     return {
-//         init: function() {
-//             console.log("Application has started");
-//             UICtrl.displayMonth();
-//             UICtrl.displayBudget({
-//                 budget: 0,
-//                 totalInc: 0,
-//                 totalExp: 0,
-//                 percentage: 0
-//             });
-//             setupEventListeners();
-//         }
-//     }
+    return {
+        init: function() {
+            console.log("Application has started");
+            UICtrl.displayMonth();
+            UICtrl.displayBudget({
+                budget: 0,
+                totalInc: 0,
+                totalExp: 0,
+                percentage: 0
+            });
+            setupEventListeners();
+        }
+    }
 
-// })(budgetController, UIController);
+})(budgetController, UIController);
 
-// controller.init();
+controller.init();
+
+
