@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
 import { Form, Input, Button, Card, Row, Col } from 'antd';
-import './styles.css';
 
 const API_KEY = "ad92f2fdefbf4f10b9d7dc8bc19e1fd2";
 
@@ -8,9 +8,11 @@ const HomePage = () => {
 
     const [form] = Form.useForm();
     const [city, setCity] = useState('');
+    const [lat, setLat] = useState();
+    const [lon, setLon] = useState();
     const [cities, setCities] = useState([]);
 
-    console.log('test cities', cities);
+    console.log('test cities', cities)
 
     const onFinish = ({ city }) => {
         setCity(city);
@@ -24,6 +26,8 @@ const HomePage = () => {
                 (result) => {
                     if(result && result.cod == 200) {
                         setCities([...cities, result]);
+                        setLon(result.coord.lon);
+                        setLat(result.coord.lat);
                     }
                 },
                 (error) => {
@@ -32,19 +36,21 @@ const HomePage = () => {
             )
     }, [city]);
 
-    
     const renderCards = (cities) => {
         
         return (
             <Row gutter={16} style={{ marginTop: '30px' }}>
                 {cities && cities.map(city => {
-                    const { main, name, weather } = city;
+                    const { main, name, weather, id } = city;
                     const icon = `https://openweathermap.org/img/wn/${weather[0]["icon"]}@2x.png`;
                     return (
-                        <Col className="gutter-row" lg={{ span: 8 }} md={{ span: 12 }} xs={{ span: 24 }}>
-                            <Card title={name} extra={<a href="#">More</a>} style={{ width: 280, margin: '10px 0' }}>
+                        <Col className="gutter-row" lg={{ span: 8 }} md={{ span: 12 }} xs={{ span: 24 }} key={id}>
+                            <Card 
+                                title={name} 
+                                extra={<Link to={`/${lat}:${lon}`}>More</Link>}
+                                style={{ width: 280, margin: '10px 0' }}>
                                 <p style={{ fontSize: '24px', fontWeight: 'bold' }}>{Math.round(main.temp)}°C</p>
-                                <img class="city-icon" src={icon} alt={weather[0]["main"]} />
+                                <img className="city-icon" src={icon} alt={weather[0]["main"]} />
                                 <p>{(weather[0]["description"]).toUpperCase()}</p>
                             </Card>
                         </Col>
