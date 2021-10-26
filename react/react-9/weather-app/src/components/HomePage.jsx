@@ -8,11 +8,7 @@ const HomePage = () => {
 
     const [form] = Form.useForm();
     const [city, setCity] = useState('');
-    const [lat, setLat] = useState();
-    const [lon, setLon] = useState();
-    const [cities, setCities] = useState([]);
-
-    console.log('test cities', cities)
+    const [cities, setCities] = useState(JSON.parse(localStorage.getItem('allCities')) || []);
 
     const onFinish = ({ city }) => {
         setCity(city);
@@ -24,10 +20,9 @@ const HomePage = () => {
             .then(res => res.json())
             .then(
                 (result) => {
-                    if(result && result.cod == 200) {
+                    if(result && result.cod === 200) {
                         setCities([...cities, result]);
-                        setLon(result.coord.lon);
-                        setLat(result.coord.lat);
+                        localStorage.setItem("allCities", JSON.stringify([...cities, result]));
                     }
                 },
                 (error) => {
@@ -41,13 +36,13 @@ const HomePage = () => {
         return (
             <Row gutter={16} style={{ marginTop: '30px' }}>
                 {cities && cities.map(city => {
-                    const { main, name, weather, id } = city;
+                    const { main, name, weather, id, coord } = city;
                     const icon = `https://openweathermap.org/img/wn/${weather[0]["icon"]}@2x.png`;
                     return (
                         <Col className="gutter-row" lg={{ span: 8 }} md={{ span: 12 }} xs={{ span: 24 }} key={id}>
                             <Card 
                                 title={name} 
-                                extra={<Link to={`/${lat}:${lon}`}>More</Link>}
+                                extra={<Link to={`/${coord.lat}:${coord.lon}`}>More</Link>}
                                 style={{ width: 280, margin: '10px 0' }}>
                                 <p style={{ fontSize: '24px', fontWeight: 'bold' }}>{Math.round(main.temp)}°C</p>
                                 <img className="city-icon" src={icon} alt={weather[0]["main"]} />
@@ -63,6 +58,7 @@ const HomePage = () => {
 
     return (
         <>
+            <div style={{fontSize: '26px', fontWeight: 'bold', marginBottom: '30px'}}>Simple weather app</div>
             <Form
                 form={form}
                 size="large"

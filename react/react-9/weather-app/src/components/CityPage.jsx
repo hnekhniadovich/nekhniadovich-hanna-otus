@@ -35,7 +35,7 @@ const CityPage = () => {
                     const d = new Date();
                     let dayName = days[d.getDay() + idx%6];
                     if(idx === 0) {
-                        dayName = 'Today'
+                        dayName = 'Today';
                     }
                     const { temp: { day }, weather } = data;
                     const iconImg = `https://openweathermap.org/img/wn/${weather[0].icon}@2x.png`;
