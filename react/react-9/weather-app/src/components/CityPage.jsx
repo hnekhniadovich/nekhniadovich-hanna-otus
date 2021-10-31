@@ -33,7 +33,8 @@ const CityPage = () => {
             <Row gutter={8} style={{ marginTop: '30px' }}>
                 {weather && weather.map((data, idx) => {
                     const d = new Date();
-                    let dayName = days[d.getDay() + idx%6];
+                    let dayName = days[idx%7];
+                    console.log('test day name', dayName)
                     if(idx === 0) {
                         dayName = 'Today';
                     }
