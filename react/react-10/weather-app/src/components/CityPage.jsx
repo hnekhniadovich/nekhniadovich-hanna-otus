@@ -18,8 +18,8 @@ const CityPage = () => {
             .then(res => res.json())
             .then(
                 (result) => {
-                    setWeather(result.daily)
-                    setTimezone(result.timezone)
+                    setWeather(result.daily);
+                    setTimezone(result.timezone);
                 },
                 (error) => {
                     console.log(error);

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
 import { Form, Input, Button, Card, Row, Col } from 'antd';
+import { HeartOutlined, HeartFilled } from '@ant-design/icons'
+import Cities from './Cities';
 
 const API_KEY = "ad92f2fdefbf4f10b9d7dc8bc19e1fd2";
 
@@ -8,12 +9,26 @@ const HomePage = () => {
 
     const [form] = Form.useForm();
     const [city, setCity] = useState('');
-    const [cities, setCities] = useState(JSON.parse(localStorage.getItem('allCities')) || []);
+    const [cities, setCities] = useState([]);
+    const [favourites, setFavourites] = useState(JSON.parse(localStorage.getItem('favourites')) || []);
+
+    console.log('test favourites', favourites);
 
     const onFinish = ({ city }) => {
         setCity(city);
         form.resetFields();
     };
+
+    const addToFavourites = (city) => {
+        setFavourites([...favourites, city]);
+        localStorage.setItem('favourites', JSON.stringify([...favourites, city]));
+        setCities(cities.filter(c => c.id !== city.id));
+    }
+
+    const removeFromFavourites = (city) => {
+        setFavourites(favourites.filter(c => c.id !== city.id));
+        localStorage.setItem('favourites', JSON.stringify(favourites.filter(c => c.id !== city.id)));
+    }
 
     useEffect(() => {
         fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`)
@@ -22,7 +37,6 @@ const HomePage = () => {
                 (result) => {
                     if(result && result.cod === 200) {
                         setCities([...cities, result]);
-                        localStorage.setItem("allCities", JSON.stringify([...cities, result]));
                     }
                 },
                 (error) => {
@@ -30,31 +44,6 @@ const HomePage = () => {
                 }
             )
     }, [city]);
-
-    const renderCards = (cities) => {
-        
-        return (
-            <Row gutter={16} style={{ marginTop: '30px' }}>
-                {cities && cities.map(city => {
-                    const { main, name, weather, id, coord } = city;
-                    const icon = `https://openweathermap.org/img/wn/${weather[0]["icon"]}@2x.png`;
-                    return (
-                        <Col className="gutter-row" lg={{ span: 8 }} md={{ span: 12 }} xs={{ span: 24 }} key={id}>
-                            <Card 
-                                title={name} 
-                                extra={<Link to={`/${coord.lat}:${coord.lon}`}>More</Link>}
-                                style={{ width: 280, margin: '10px 0' }}>
-                                <p style={{ fontSize: '24px', fontWeight: 'bold' }}>{Math.round(main.temp)}°C</p>
-                                <img className="city-icon" src={icon} alt={weather[0]["main"]} />
-                                <p>{(weather[0]["description"]).toUpperCase()}</p>
-                            </Card>
-                        </Col>
-                    )
-                })}
-            </Row>
-        )
-
-    };
 
     return (
         <>
@@ -80,9 +69,29 @@ const HomePage = () => {
                     </Button>
                 </Form.Item>
             </Form>
-            <div>
-                {renderCards(cities)}
-            </div>
+            <Row>
+                <Col span={18}>
+                    <Cities 
+                        cities={cities} 
+                        favouritesControl={addToFavourites} 
+                        iconFav={<HeartOutlined />} 
+                        lg={8} 
+                        md={12} 
+                        xs={24}
+                    />
+                </Col> 
+                <Col span={6}>
+                    <div>Your favourite cities are here:</div>
+                    <Cities 
+                        cities={favourites} 
+                        favouritesControl={removeFromFavourites} 
+                        iconFav={<HeartFilled />}
+                        lg={24} 
+                        md={24} 
+                        xs={24}
+                    />
+                </Col> 
+            </Row>
         </>
     );
 };
