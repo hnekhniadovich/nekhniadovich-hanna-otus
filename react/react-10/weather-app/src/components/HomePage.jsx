@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Card, Row, Col } from 'antd';
 import { HeartOutlined, HeartFilled } from '@ant-design/icons'
 import Cities from './Cities';
+import { getWeatherByCity } from '../services/api-service';
 
-const API_KEY = "ad92f2fdefbf4f10b9d7dc8bc19e1fd2";
 
 const HomePage = () => {
 
@@ -31,18 +31,17 @@ const HomePage = () => {
     }
 
     useEffect(() => {
-        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`)
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    if(result && result.cod === 200) {
-                        setCities([...cities, result]);
-                    }
-                },
-                (error) => {
-                    console.log(error);
+        getWeatherByCity(city)
+        .then(
+            (result) => {
+                if(result && result.cod === 200) {
+                    setCities([...cities, result]);
                 }
-            )
+            },
+            (error) => {
+                console.log(error);
+            }
+        )
     }, [city]);
 
     return (

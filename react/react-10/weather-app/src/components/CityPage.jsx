@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import { Card, Row, Col } from 'antd';
-
-const API_KEY = "ad92f2fdefbf4f10b9d7dc8bc19e1fd2";
+import { getWeatherDetailsByCity } from '../services/api-service';
 
 const CityPage = () => {
 
@@ -14,17 +13,16 @@ const CityPage = () => {
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
     useEffect(() => {
-        fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,minutely,alerts&appid=${API_KEY}&units=metric`)
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    setWeather(result.daily);
-                    setTimezone(result.timezone);
-                },
-                (error) => {
-                    console.log(error);
-                }
-            )
+        getWeatherDetailsByCity(lat, lon)
+        .then(
+            (result) => {
+                setWeather(result.daily);
+                setTimezone(result.timezone);
+            },
+            (error) => {
+                console.log(error);
+            }
+        )
     }, [lat, lon]);
 
     return (

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import { HeartOutlined, HeartFilled } from '@ant-design/icons';
 import { Button, Card, Row, Col } from 'antd';
 
 const Cities = (props) => {
