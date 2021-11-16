@@ -1,0 +1,9 @@
+.container {
+  width: 80%;
+  margin: 20px auto;
+  outline: 1px solid #673ab7;
+}
+
+mat-tab {
+  min-width: 25%;
+}
