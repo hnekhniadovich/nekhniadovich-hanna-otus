@@ -9,7 +9,7 @@ export class RecentlyAddedComponent implements OnInit {
 
   newWords = [
     {
-      data: 'Dec 1st, 2021',
+      date: 'November 1st, 2021',
       words: [
         'to apply - добавлять',
         'education - образование',
@@ -18,7 +18,7 @@ export class RecentlyAddedComponent implements OnInit {
       ]
     },
     {
-      data: 'Dec 15th, 2021',
+      date: 'November 15th, 2021',
       words: [
         'to come - приходить',
         'to see - видеть',

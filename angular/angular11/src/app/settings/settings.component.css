@@ -1,0 +1,14 @@
+button {
+  width: 120px;
+}
+
+mat-card {
+  text-align: center;
+}
+
+mat-card-content {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin: 20px auto;
+}

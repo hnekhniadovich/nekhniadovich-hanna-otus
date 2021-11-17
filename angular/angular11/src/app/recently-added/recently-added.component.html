@@ -1,1 +1,28 @@
-<p>recently-added works!</p>
+<mat-card>
+<mat-card-content>
+    <mat-accordion>
+        <mat-expansion-panel *ngFor="let wordsList of newWords">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    {{wordsList.date}}
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-list>
+            <mat-list-item *ngFor="let word of wordsList.words"> {{word}} </mat-list-item>
+            </mat-list>
+        </mat-expansion-panel>
+    </mat-accordion>
+</mat-card-content>
+<mat-card-actions>
+    <button mat-raised-button
+            [color]="isAdd ? 'warn' : 'primary'"
+            (click)="onAdd()">
+    Add New
+    </button>
+</mat-card-actions>
+<mat-card-footer *ngIf="isAdd">
+    <mat-form-field class="example-full-width">
+        <input matInput placeholder="New Word - Transation">
+    </mat-form-field>
+</mat-card-footer>
+</mat-card>
