@@ -1,28 +1,47 @@
 <mat-card>
-<mat-card-content>
-    <mat-accordion>
-        <mat-expansion-panel *ngFor="let wordsList of newWords">
-            <mat-expansion-panel-header>
-                <mat-panel-title>
-                    {{wordsList.date}}
-                </mat-panel-title>
-            </mat-expansion-panel-header>
-            <mat-list>
-            <mat-list-item *ngFor="let word of wordsList.words"> {{word}} </mat-list-item>
-            </mat-list>
-        </mat-expansion-panel>
-    </mat-accordion>
-</mat-card-content>
-<mat-card-actions>
-    <button mat-raised-button
-            [color]="isAdd ? 'warn' : 'primary'"
-            (click)="onAdd()">
-    Add New
-    </button>
-</mat-card-actions>
-<mat-card-footer *ngIf="isAdd">
-    <mat-form-field class="example-full-width">
-        <input matInput placeholder="New Word - Transation">
-    </mat-form-field>
-</mat-card-footer>
-</mat-card>
+    <mat-card-content>
+      <mat-accordion>
+          <mat-list dense>
+            <mat-list-item *ngFor="let dictItem of dict">
+              • {{ dictItem.word }}: {{ dictItem.translate }}
+            </mat-list-item>
+          </mat-list>
+      </mat-accordion>
+    </mat-card-content>
+    <mat-card-content *ngIf="isAdd">
+      <mat-grid-list cols="4" rowHeight="64px">
+        <mat-grid-tile colspan="3">
+          <mat-form-field>
+            <input matInput placeholder="Add a word in Russian you want to transalate in English"
+                   [(ngModel)]="userInput">
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1">
+          <button mat-button
+                  [disabled]="!userInput"
+                  (click)="onTranslate()">
+            Transalte
+          </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+      <mat-list *ngIf="dictItems">
+        <mat-list-item *ngFor="let dictItem of dictItems"> • {{ dictItem.word }}: {{ dictItem.translate }} </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button
+              color="primary"
+              *ngIf="!isAdd; else elseBlock"
+              (click)="isAdd = !isAdd">
+        {{ 'Add New' }}
+      </button>
+      <ng-template #elseBlock>
+        <button mat-raised-button
+                color="primary"
+                [disabled]="!canSave"
+                (click)="onSave()">
+          {{ 'Save' }}
+        </button>
+      </ng-template>
+    </mat-card-actions>
+  </mat-card>

@@ -1,1 +1,12 @@
+mat-card-content:first-child {
+  max-height: 99px;
+  overflow-y: scroll;
+}
 
+mat-form-field {
+  width: 100%;
+}
+
+mat-card-actions {
+  text-align: center;
+}
