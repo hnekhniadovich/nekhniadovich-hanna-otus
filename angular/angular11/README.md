@@ -1,4 +1,12 @@
-# Angular11
+# App To Practice Learning Foreign Words
+
+### Install
+
+`$ npm install`
+
+`$ ng serve`
+
+navigate to `http://localhost:4200/`
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.12.
 
