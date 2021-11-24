@@ -1,0 +1,47 @@
+<mat-card>
+    <mat-card-content>
+      <mat-accordion>
+          <mat-list dense>
+            <mat-list-item *ngFor="let dictItem of dict">
+              • {{ dictItem.word }}: {{ dictItem.translate }}
+            </mat-list-item>
+          </mat-list>
+      </mat-accordion>
+    </mat-card-content>
+    <mat-card-content *ngIf="isAdd">
+      <mat-grid-list cols="4" rowHeight="64px">
+        <mat-grid-tile colspan="3">
+          <mat-form-field>
+            <input matInput placeholder="Add a word in Russian you want to transalate in English"
+                   [(ngModel)]="userInput">
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1">
+          <button mat-button
+                  [disabled]="!userInput"
+                  (click)="onTranslate()">
+            Transalte
+          </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+      <mat-list *ngIf="dictItems">
+        <mat-list-item *ngFor="let dictItem of dictItems"> • {{ dictItem.word }}: {{ dictItem.translate }} </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button
+              color="primary"
+              *ngIf="!isAdd; else elseBlock"
+              (click)="isAdd = !isAdd">
+        {{ 'Add New' }}
+      </button>
+      <ng-template #elseBlock>
+        <button mat-raised-button
+                color="primary"
+                [disabled]="!canSave"
+                (click)="onSave()">
+          {{ 'Save' }}
+        </button>
+      </ng-template>
+    </mat-card-actions>
+  </mat-card>

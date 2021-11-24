@@ -1,0 +1,23 @@
+<mat-card>
+    <mat-card-content>
+        <mat-form-field>
+            <mat-select placeholder="Language" [(value)]="selectedLanguage">
+                <mat-option *ngFor="let language of languages" [value]="language" >
+                    {{language}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-select placeholder="No. of words" [(value)]="selectedLevel">
+                <mat-option *ngFor="let level of levels" [value]="level">
+                    {{level}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <p>Language: {{selectedLanguage}} / Difficulty: {{selectedLevel}} words</p>
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-raised-button color="warn">Back</button>
+        <button mat-raised-button color="primary">Save</button>
+    </mat-card-actions>
+</mat-card>
