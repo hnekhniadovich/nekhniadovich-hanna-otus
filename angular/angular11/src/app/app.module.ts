@@ -18,13 +18,16 @@ import { AppComponent } from './app.component';
 import { RecentlyAddedComponent } from './recently-added/recently-added.component';
 import { GoComponent } from './go/go.component';
 import { SettingsComponent } from './settings/settings.component';
+import { HeaderComponent } from './header/header.component';
+import { StorageService } from "./services/storage/storage.service";
 
 @NgModule({
   declarations: [
     AppComponent,
     RecentlyAddedComponent,
     GoComponent,
-    SettingsComponent
+    SettingsComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +45,7 @@ import { SettingsComponent } from './settings/settings.component';
     HttpClientModule,
     FormsModule
   ],
-  providers: [],
+  providers: [StorageService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

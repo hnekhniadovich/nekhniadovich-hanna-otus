@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {StorageService} from "../services/storage/storage.service";
-import {Word} from "../app.interfaces";
+import { StorageService } from "../services/storage/storage.service";
+import { Word } from "../app.interfaces";
 
 @Component({
   selector: 'app-go',
