@@ -34,7 +34,7 @@ export class GoComponent implements OnInit {
     }
 
     if (this.turn === this.level) {
-      this.message = `Your result ${this.result} from ${this.level}`;
+      this.message = `Your result: ${this.result} out of ${this.level}`;
       this.placeholder = '';
       this.userInput = '';
       this.disableInput = true;
