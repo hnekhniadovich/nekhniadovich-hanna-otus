@@ -19,7 +19,6 @@ import { Word } from "../app.interfaces";
 export class RecentlyAddedComponent implements OnInit {
 
   dict!: Array<Word>;
-
   isAdd = false;
   canSave!: boolean;
   userInput = '';
